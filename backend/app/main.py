@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from app.api import events, persons, photos, pipeline, privacy, search
+from app.api import benchmark, events, persons, photos, pipeline, privacy, search
 from app.config import UPLOAD_DIR
 
 logging.basicConfig(level=logging.INFO)
@@ -37,6 +37,7 @@ app.include_router(pipeline.router, prefix=api_prefix)
 app.include_router(persons.router, prefix=api_prefix)
 app.include_router(search.router, prefix=api_prefix)
 app.include_router(privacy.router, prefix=api_prefix)
+app.include_router(benchmark.router, prefix=api_prefix)
 
 
 @app.get("/health")
