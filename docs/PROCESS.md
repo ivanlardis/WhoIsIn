@@ -40,16 +40,15 @@
 ## Шаги разработки
 
 ### Шаг 0: Подготовка среды
-**Статус:** 🔄 В процессе
-**Время:** —
+**Статус:** ✅ Завершён
+**Время:** ~15 мин
 
-**Что делали:**
-- Установили BMAD-METHOD
-- Создали CLAUDE.md — проектная память для Claude Code
-- Настроили GitHub: milestones (7 фаз), labels (6 категорий), issues
-- Установили скиллы: UI/UX Pro Max, frontend-design, skill-creator, Excalidraw, Code Reviewer, webapp-testing, frontend-slides
-- Создали кастомные скиллы: /log-decision, /create-issue, /screenshot
-- Настроили MCP серверы: Playwright, PostgreSQL
+**Что сделали:**
+- Установили BMAD-METHOD (43 скилла: PM, Architect, UX, Dev, QA, Tech Writer и др.)
+- Создали CLAUDE.md — проектная память (стек, команды, правила кодирования)
+- Настроили GitHub: 7 milestones (Phase 0-6), 6 labels, 8 issues
+- Создали 3 кастомных скилла: `/log-decision`, `/create-issue`, `/screenshot`
+- MCP: Playwright (подключён), PostgreSQL (подключим при создании БД)
 
 **Решения:**
 | Решение | Выбор | Почему | Альтернативы |
@@ -58,7 +57,7 @@
 | Трекинг | GitHub Issues + Decision Log | Прозрачность для команды + история решений в git blame | Notion, Linear, только TODO.md |
 | Spec-driven тулинг | orval (OpenAPI → React Query) | Type-safe API client, автогенерация | openapi-generator, ручной fetch |
 
-**Скриншоты:** —
+**Артефакты:** CLAUDE.md, .claude/skills/\*, \_bmad/\*, GitHub Issues #1-#8
 
 ---
 
