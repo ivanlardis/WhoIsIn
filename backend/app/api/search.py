@@ -67,11 +67,11 @@ async def search_by_selfie(
     # <=> operator is cosine distance in pgvector
     query = text("""
         SELECT id, name, thumbnail_path, photo_count, face_count,
-               1 - (representative_embedding <=> :emb::vector) AS similarity
+               1 - (representative_embedding <=> CAST(:emb AS vector)) AS similarity
         FROM persons
         WHERE event_id = :event_id
           AND representative_embedding IS NOT NULL
-        ORDER BY representative_embedding <=> :emb::vector
+        ORDER BY representative_embedding <=> CAST(:emb AS vector)
         LIMIT 3
     """)
 
