@@ -1,6 +1,7 @@
 """Pydantic schemas matching docs/openapi.yaml component schemas."""
 
-from datetime import date, datetime
+import datetime as _dt
+from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -10,19 +11,19 @@ from pydantic import BaseModel, Field
 
 class CreateEventRequest(BaseModel):
     name: str
-    date: date | None = None
-    description: str | None = None
+    date: Optional[_dt.date] = None
+    description: Optional[str] = None
 
 
 class EventResponse(BaseModel):
     id: int
     name: str
-    date: date | None = None
-    description: str | None = None
+    date: Optional[_dt.date] = None
+    description: Optional[str] = None
     photo_count: int = Field(0, alias="photoCount")
     person_count: int = Field(0, alias="personCount")
     status: str = "created"
-    created_at: datetime = Field(alias="createdAt")
+    created_at: _dt.datetime = Field(alias="createdAt")
 
     model_config = {"from_attributes": True, "populate_by_name": True}
 
@@ -37,7 +38,7 @@ class EventStats(BaseModel):
 
 
 class EventDetail(EventResponse):
-    stats: EventStats | None = None
+    stats: Optional[EventStats] = None
 
 
 # ---------- Photos ----------
@@ -47,9 +48,9 @@ class PhotoResponse(BaseModel):
     id: int
     filename: str
     url: str
-    thumbnail_url: str | None = Field(None, alias="thumbnailUrl")
-    width: int | None = None
-    height: int | None = None
+    thumbnail_url: Optional[str] = Field(None, alias="thumbnailUrl")
+    width: Optional[int] = None
+    height: Optional[int] = None
     face_count: int = Field(0, alias="faceCount")
 
     model_config = {"from_attributes": True, "populate_by_name": True}
@@ -66,15 +67,15 @@ class FaceResponse(BaseModel):
     id: int
     bbox: BBox
     confidence: float
-    thumbnail_url: str | None = Field(None, alias="thumbnailUrl")
-    person_id: int | None = Field(None, alias="personId")
+    thumbnail_url: Optional[str] = Field(None, alias="thumbnailUrl")
+    person_id: Optional[int] = Field(None, alias="personId")
 
     model_config = {"from_attributes": True, "populate_by_name": True}
 
 
 class PhotoDetail(PhotoResponse):
     faces: list[FaceResponse] = []
-    description: str | None = None
+    description: Optional[str] = None
 
 
 class PhotoList(BaseModel):
@@ -116,10 +117,10 @@ class PipelineStatusResponse(BaseModel):
     event_id: int = Field(alias="eventId")
     status: str = "idle"
     progress: float = 0.0
-    eta_seconds: int | None = Field(None, alias="etaSeconds")
-    current_photo_index: int | None = Field(None, alias="currentPhotoIndex")
-    total_photos: int | None = Field(None, alias="totalPhotos")
-    error: str | None = None
+    eta_seconds: Optional[int] = Field(None, alias="etaSeconds")
+    current_photo_index: Optional[int] = Field(None, alias="currentPhotoIndex")
+    total_photos: Optional[int] = Field(None, alias="totalPhotos")
+    error: Optional[str] = None
 
     model_config = {"from_attributes": True, "populate_by_name": True}
 
