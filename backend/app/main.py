@@ -1,6 +1,8 @@
 """FastAPI application entrypoint."""
 
 import logging
+from contextlib import asynccontextmanager
+from typing import AsyncGenerator
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,13 +10,27 @@ from fastapi.staticfiles import StaticFiles
 
 from app.api import benchmark, events, persons, photos, pipeline, privacy, search
 from app.config import UPLOAD_DIR
+from app.db import engine
+from app.models.models import Base
 
 logging.basicConfig(level=logging.INFO)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+    from sqlalchemy import text
+
+    async with engine.begin() as conn:
+        await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
+        await conn.run_sync(Base.metadata.create_all)
+    yield
+
 
 app = FastAPI(
     title="WhoIsIn API",
     description="Intelligent face-sorting photo organizer for events",
     version="1.0.0",
+    lifespan=lifespan,
 )
 
 app.add_middleware(

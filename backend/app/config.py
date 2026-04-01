@@ -14,7 +14,7 @@ UPLOAD_DIR: Path = Path(os.getenv("UPLOAD_DIR", "/app/uploads"))
 INSIGHTFACE_MODEL: str = os.getenv("INSIGHTFACE_MODEL", "buffalo_sc")
 
 # HDBSCAN defaults
-HDBSCAN_MIN_CLUSTER_SIZE: int = int(os.getenv("HDBSCAN_MIN_CLUSTER_SIZE", "3"))
+HDBSCAN_MIN_CLUSTER_SIZE: int = int(os.getenv("HDBSCAN_MIN_CLUSTER_SIZE", "2"))
 
 # Face detection confidence threshold
 FACE_CONFIDENCE_THRESHOLD: float = float(
