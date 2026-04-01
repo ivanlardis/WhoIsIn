@@ -1,2 +1,7 @@
 tmp/
 _bmad-output/
+__pycache__/
+*.pyc
+.env
+node_modules/
+dist/
