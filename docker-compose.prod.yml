@@ -33,10 +33,11 @@ services:
   umami:
     image: ghcr.io/umami-software/umami:postgresql-latest
     restart: unless-stopped
+    ports:
+      - "8001:3000"
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-whoisin}:${POSTGRES_PASSWORD}@db:5432/umami
       APP_SECRET: ${UMAMI_SECRET:-replace-me-secret}
-      BASE_PATH: /umami
     depends_on:
       db:
         condition: service_healthy
