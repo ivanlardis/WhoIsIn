@@ -1,0 +1,43 @@
+"""Pydantic schemas for request/response validation."""
+
+from app.schemas.schemas import (
+    BBox,
+    ConsentRequest,
+    CreateEventRequest,
+    EventDetail,
+    EventResponse,
+    EventStats,
+    FaceResponse,
+    PersonResponse,
+    PhotoDetail,
+    PhotoList,
+    PhotoResponse,
+    PipelineStatusResponse,
+    SelfieMatch,
+    SelfieSearchResult,
+    SemanticSearchRequest,
+    SemanticSearchResult,
+    UpdatePersonRequest,
+    UploadResult,
+)
+
+__all__ = [
+    "BBox",
+    "ConsentRequest",
+    "CreateEventRequest",
+    "EventDetail",
+    "EventResponse",
+    "EventStats",
+    "FaceResponse",
+    "PersonResponse",
+    "PhotoDetail",
+    "PhotoList",
+    "PhotoResponse",
+    "PipelineStatusResponse",
+    "SelfieMatch",
+    "SelfieSearchResult",
+    "SemanticSearchRequest",
+    "SemanticSearchResult",
+    "UpdatePersonRequest",
+    "UploadResult",
+]
