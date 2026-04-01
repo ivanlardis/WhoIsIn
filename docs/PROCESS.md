@@ -135,24 +135,45 @@
 ---
 
 ### Шаг 6: Backend
-**Статус:** ⏳ Ожидает
-**Агент:** BMAD Developer Agent
+**Статус:** ✅ Завершён
+**Агент:** 2 параллельных Claude Code агента
+
+**Что сделали (1776 строк кода):**
+- FastAPI app с CORS, lifespan, static files
+- Async SQLAlchemy + pgvector модели (7 таблиц)
+- Pydantic schemas с camelCase aliases по OpenAPI
+- ML сервисы: FaceDetector (InsightFace), FaceClusterer (HDBSCAN), PipelineOrchestrator (WebSocket)
+- 15 API endpoints: events, photos, pipeline, persons, search, privacy
+- WebSocket manager для real-time прогресса
+
+**Артефакты:** backend/ (20 Python файлов), Dockerfile, docker-compose.yml
 
 ---
 
 ### Шаг 7: Frontend
-**Статус:** ⏳ Ожидает
-**Агент:** BMAD Developer Agent
+**Статус:** ✅ Завершён
+**Агент:** Claude Code агент + UI/UX Pro Max skill
+
+**Что сделали (5977 строк):**
+- React 19 + Vite + Tailwind v4
+- Design System через UI/UX Pro Max: Minimalism + Indigo + Space Grotesk/DM Sans
+- 7 компонентов: UploadZone, PipelineProgress, PersonCard, PhotoGrid, PhotoLightbox, SelfieSearch, ConsentBanner
+- 3 страницы: EventsPage, EventPage, PersonPage
+- Typed API client + React Query hooks + WebSocket hook
+- Dockerfile (multi-stage) + nginx.conf
+
+**Артефакты:** frontend/ (18 файлов), docs/DESIGN_SYSTEM.md
 
 ---
 
 ### Шаг 8: Фичи
-**Статус:** ⏳ Ожидает
+**Статус:** ✅ Интегрировано в backend/frontend
+**Примечание:** Selfie search, consent, ZIP export, переименование — реализованы в Phase 2/3
 
 ---
 
 ### Шаг 9: ML Benchmark
-**Статус:** ⏳ Ожидает
+**Статус:** 🔄 В процессе
 
 ---
 
