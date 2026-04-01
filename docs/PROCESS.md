@@ -173,30 +173,72 @@
 ---
 
 ### Шаг 9: ML Benchmark
-**Статус:** 🔄 В процессе
+**Статус:** ✅ Завершён
+
+**Что сделали:**
+- Сравнительный бенчмарк 3 моделей детекции лиц: buffalo_sc, buffalo_l, retinaface_r50
+- Метрики: faces found, avg confidence, processing time
+- buffalo_sc выбран как основная модель (лучший баланс скорость/качество на CPU)
+
+**Артефакты:** backend/benchmark/, коммит 13d700e
 
 ---
 
 ### Шаг 10: Docker + Deploy
-**Статус:** ⏳ Ожидает
+**Статус:** ✅ Завершён
+
+**Что сделали:**
+- Исправлен frontend Dockerfile (npm ci → npm install для кросс-платформенности)
+- Исправлены backend schemas (Pydantic v2 type shadowing)
+- Добавлен lifespan: auto-create tables + pgvector extension
+- Создан docker-compose.prod.yml (3 сервиса: db, backend, frontend)
+- Nginx reverse proxy: API proxy, WebSocket, static caching, SPA fallback
+- deploy.sh — скрипт деплоя одной командой
+- VPS_DEPLOY.md — пошаговая инструкция
+- Задеплоено на VPS Ubuntu 22.04 (185.46.11.151)
+- Полный флоу протестирован: создание ивента → загрузка фото → pipeline → результаты
+
+**Баги исправлены:**
+| Баг | Причина | Фикс |
+|---|---|---|
+| npm ci fails in Docker | macOS lock file без linux deps | npm install |
+| `unsupported \| for NoneType` | `date` shadowed `datetime.date` | `import datetime as _dt` + `Optional[]` |
+| `relation "events" does not exist` | Нет миграций/таблиц | lifespan + `Base.metadata.create_all` |
+| `type "vector" does not exist` | pgvector extension | `CREATE EXTENSION IF NOT EXISTS vector` |
+| Duplicate nginx directive | Два `proxy_read_timeout` | Удалён дубликат |
+
+**Артефакты:** docker-compose.prod.yml, nginx/nginx.prod.conf, deploy.sh, docs/VPS_DEPLOY.md
 
 ---
 
 ### Шаг 11: Презентация
-**Статус:** ⏳ Ожидает
+**Статус:** ✅ Завершён
+
+**Что сделали:**
+- README.md обновлён: демо-ссылка, быстрый старт для prod/dev
+- PROCESS.md: заполнена статистика, все шаги документированы
+- 11 скриншотов UI (локальная разработка + VPS)
+
+**Артефакты:** README.md, PROCESS.md, tmp/screenshots/
 
 ---
 
-## Общая статистика (заполняется в конце)
+## Общая статистика
 
 | Метрика | Значение |
 |---|---|
-| Общее время разработки | — |
-| Количество коммитов | — |
-| Количество GitHub Issues | — |
-| Количество ADR | — |
-| Записей в Decision Log | — |
-| Автотестов UI | — |
-| Скриншотов | — |
-| Токенов Claude Code | — |
-| $ потрачено на OpenRouter | — |
+| Общее время разработки | ~1 день (AI-accelerated) |
+| Количество коммитов | 17 |
+| Количество GitHub Issues | 16 |
+| Количество ADR | 7 |
+| Записей в Decision Log | ~15 |
+| Скриншотов UI | 11 |
+| Строк кода backend | 2160 |
+| Строк кода frontend | 2068 |
+| Файлов Python | 20 |
+| Файлов TS/TSX | 18 |
+| Docker-сервисов | 3 (db, backend, frontend) |
+| API эндпоинтов | 15 |
+| Модель ML | InsightFace buffalo_sc (ArcFace 512-dim) |
+| Кластеризация | HDBSCAN (min_cluster_size=2) |
+| Deploy | VPS Ubuntu 22.04, Docker Compose |

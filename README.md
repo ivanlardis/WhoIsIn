@@ -2,6 +2,8 @@
 
 Интеллектуальный сервис для сортировки фотографий по лицам. Загрузите фото с мероприятия — сервис автоматически найдёт лица, сгруппирует по людям и позволит каждому участнику найти себя по селфи.
 
+> **Demo:** [http://185.46.11.151](http://185.46.11.151) — рабочий инстанс на VPS
+
 ## Возможности
 
 - **Real-time pipeline** — обработка фото с визуальным прогрессом через WebSocket
@@ -23,17 +25,23 @@
 
 ## Быстрый старт
 
+### Разработка (локально)
 ```bash
-# Клонировать
 git clone https://github.com/ivanlardis/WhoIsIn.git
 cd WhoIsIn
-
-# Запустить
 docker compose up -d
-
-# Открыть
 open http://localhost:3000
 ```
+
+### Production (VPS)
+```bash
+git clone https://github.com/ivanlardis/WhoIsIn.git /opt/whoisin
+cd /opt/whoisin
+cp .env.example .env   # заполнить POSTGRES_PASSWORD и OPENROUTER_API_KEY
+docker compose -f docker-compose.prod.yml up -d --build
+```
+
+Подробнее: [docs/VPS_DEPLOY.md](docs/VPS_DEPLOY.md)
 
 ## Design System
 
