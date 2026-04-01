@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { trackEvent } from "../lib/utils";
 import {
   ArrowLeft,
   Camera,
@@ -184,7 +185,7 @@ export default function EventPage() {
           <div className="mb-6">
             <button
               type="button"
-              onClick={() => startPipeline.mutate()}
+              onClick={() => { trackEvent("pipeline-started", { eventId }); startPipeline.mutate(); }}
               disabled={startPipeline.isPending}
               className={cn(
                 "flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-3",

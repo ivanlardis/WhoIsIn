@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { X, Camera, Loader2, Search } from "lucide-react";
-import { cn } from "../lib/utils";
+import { cn, trackEvent } from "../lib/utils";
 import { useSelfieSearch } from "../api/hooks";
 import PersonCard from "./PersonCard";
 
@@ -19,6 +19,7 @@ export default function SelfieSearch({ eventId, onClose }: Props) {
       const file = files[0];
       if (!file) return;
       setPreview(URL.createObjectURL(file));
+      trackEvent("selfie-search", { eventId });
       search.mutate(file);
     },
     [search]

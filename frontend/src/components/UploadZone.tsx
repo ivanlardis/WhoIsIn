@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Upload, CheckCircle, AlertCircle } from "lucide-react";
-import { cn } from "../lib/utils";
+import { cn, trackEvent } from "../lib/utils";
 import { useUploadPhotos } from "../api/hooks";
 
 interface Props {
@@ -20,18 +20,14 @@ export default function UploadZone({ eventId }: Props) {
       if (accepted.length === 0) return;
       setProgress({ total: accepted.length, done: 0 });
 
-      // Upload in batches of 10
-      const batchSize = 10;
-      let done = 0;
-      for (let i = 0; i < accepted.length; i += batchSize) {
-        const batch = accepted.slice(i, i + batchSize);
-        await upload.mutateAsync(batch);
-        done += batch.length;
-        setProgress({ total: accepted.length, done });
+      for (let i = 0; i < accepted.length; i++) {
+        await upload.mutateAsync([accepted[i]]);
+        setProgress({ total: accepted.length, done: i + 1 });
       }
+      trackEvent("photos-uploaded", { count: accepted.length, eventId });
       setTimeout(() => setProgress(null), 2000);
     },
-    [upload]
+    [upload, eventId]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

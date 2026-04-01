@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { trackEvent } from "../lib/utils";
 import {
   Plus,
   Calendar,
@@ -47,6 +48,7 @@ export default function EventsPage() {
       },
       {
         onSuccess: (event) => {
+          trackEvent("event-created", { eventId: event.id });
           setShowModal(false);
           setForm({ name: "", date: "", description: "" });
           navigate(`/events/${event.id}`);

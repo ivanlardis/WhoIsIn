@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WhoIsIn — Презентация проекта</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --indigo: #6366F1;
+    --indigo-dark: #4F46E5;
+    --emerald: #10B981;
+    --amber: #F59E0B;
+    --slate-50: #F8FAFC;
+    --slate-100: #F1F5F9;
+    --slate-200: #E2E8F0;
+    --slate-600: #475569;
+    --slate-800: #1E293B;
+    --slate-900: #0F172A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--slate-800);
+    background: white;
+  }
+
+  .slide {
+    width: 1280px;
+    height: 720px;
+    padding: 60px 80px;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+  }
+
+  @media print {
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      margin: 0;
+    }
+    body { background: white; }
+  }
+
+  @media screen {
+    .slide {
+      margin: 20px auto;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+      border-radius: 12px;
+    }
+  }
+
+  h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 1.2;
+    color: var(--slate-900);
+  }
+
+  h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 32px;
+    color: var(--slate-900);
+    margin-bottom: 32px;
+  }
+
+  h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 22px;
+    color: var(--indigo);
+    margin-bottom: 12px;
+  }
+
+  p, li {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--slate-600);
+  }
+
+  .mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+  }
+
+  /* Slide types */
+  .slide--title {
+    background: linear-gradient(135deg, var(--indigo) 0%, #818CF8 100%);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .slide--title h1 { color: white; font-size: 56px; margin-bottom: 16px; }
+  .slide--title p { color: rgba(255,255,255,0.85); font-size: 24px; }
+  .slide--title .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    padding: 8px 24px;
+    border-radius: 100px;
+    font-size: 16px;
+    margin-top: 24px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .slide--section {
+    background: var(--slate-900);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .slide--section h2 { color: white; font-size: 48px; margin-bottom: 8px; }
+  .slide--section p { color: rgba(255,255,255,0.6); font-size: 22px; }
+  .slide--section .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 80px;
+    font-weight: 700;
+    color: var(--indigo);
+    margin-bottom: 16px;
+  }
+
+  /* Components */
+  .cols { display: flex; gap: 40px; flex: 1; }
+  .col { flex: 1; }
+
+  .card {
+    background: var(--slate-50);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .card--accent {
+    background: linear-gradient(135deg, var(--indigo) 0%, #818CF8 100%);
+    color: white;
+  }
+  .card--accent h3 { color: white; }
+  .card--accent p { color: rgba(255,255,255,0.85); }
+
+  .card--green {
+    border-left: 4px solid var(--emerald);
+  }
+  .card--amber {
+    border-left: 4px solid var(--amber);
+  }
+
+  .tag {
+    display: inline-block;
+    background: var(--indigo);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-right: 6px;
+    margin-bottom: 6px;
+  }
+  .tag--green { background: var(--emerald); }
+  .tag--amber { background: var(--amber); }
+  .tag--dark { background: var(--slate-800); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+  }
+  th {
+    text-align: left;
+    padding: 12px 16px;
+    background: var(--slate-100);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--slate-600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--slate-200);
+  }
+  tr.selected td {
+    background: rgba(99, 102, 241, 0.08);
+    font-weight: 600;
+  }
+  .check { color: var(--emerald); font-weight: 700; }
+  .cross { color: #EF4444; }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .stat-box {
+    background: var(--slate-50);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+  }
+  .stat-box .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--indigo);
+  }
+  .stat-box .label {
+    font-size: 14px;
+    color: var(--slate-600);
+    margin-top: 4px;
+  }
+
+  .pipeline-flow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 0;
+  }
+  .pipeline-step {
+    background: var(--slate-50);
+    border-radius: 10px;
+    padding: 16px 20px;
+    text-align: center;
+    flex: 1;
+  }
+  .pipeline-step .icon { font-size: 28px; margin-bottom: 6px; }
+  .pipeline-step .name { font-size: 14px; font-weight: 600; color: var(--slate-800); }
+  .pipeline-arrow { color: var(--indigo); font-size: 24px; font-weight: 700; }
+
+  .process-flow {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .process-step {
+    background: var(--slate-50);
+    border-radius: 10px;
+    padding: 12px 16px;
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    border-top: 3px solid var(--indigo);
+  }
+  .process-step .step-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--indigo);
+    font-weight: 600;
+  }
+  .process-step .step-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--slate-800);
+    margin-top: 4px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+    color: var(--slate-600);
+    margin-bottom: 28px;
+    margin-top: -24px;
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 24px;
+    left: 80px;
+    right: 80px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--slate-600);
+    opacity: 0.5;
+  }
+
+  ul { padding-left: 24px; }
+  li { margin-bottom: 8px; }
+
+  .highlight {
+    background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(99,102,241,0.05));
+    border-radius: 8px;
+    padding: 16px 20px;
+    border-left: 3px solid var(--indigo);
+    margin: 12px 0;
+  }
+
+  .emoji { font-size: 32px; margin-bottom: 8px; display: block; }
+
+  .arch-diagram {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    line-height: 1.4;
+    background: var(--slate-900);
+    color: #E2E8F0;
+    padding: 24px;
+    border-radius: 12px;
+    white-space: pre;
+  }
+  .arch-diagram .hl { color: var(--indigo); font-weight: 600; }
+  .arch-diagram .gr { color: var(--emerald); }
+  .arch-diagram .am { color: var(--amber); }
+
+  .screenshot {
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  .screenshot-frame {
+    background: var(--slate-100);
+    border-radius: 12px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: Title -->
+<div class="slide slide--title">
+  <h1>WhoIsIn</h1>
+  <p>Интеллектуальный сервис сортировки фотографий по лицам</p>
+  <div class="badge">AI-powered Face Recognition + Clustering</div>
+  <p style="margin-top: 40px; font-size: 16px; opacity: 0.7;">
+    InsightFace &middot; HDBSCAN &middot; FastAPI &middot; React &middot; PostgreSQL + pgvector
+  </p>
+</div>
+
+<!-- SLIDE 2: Problem -->
+<div class="slide">
+  <h2>Проблема</h2>
+  <div class="cols">
+    <div class="col">
+      <div class="card card--amber">
+        <span class="emoji">📸</span>
+        <h3 style="color: var(--slate-800);">После мероприятия</h3>
+        <p style="color: var(--slate-600);">Фотограф снял 500-1000 фото. Каждый участник хочет найти себя. Организатор вручную сортирует часами.</p>
+      </div>
+      <div class="card">
+        <h3>Боли</h3>
+        <ul>
+          <li>Ручная сортировка = часы работы</li>
+          <li>Участники ждут фото днями</li>
+          <li>Нет удобного инструмента</li>
+          <li>Платные решения = дорого</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card card--accent">
+        <span class="emoji">🎯</span>
+        <h3>Решение: WhoIsIn</h3>
+        <p>Загрузил фото &rarr; AI нашёл лица &rarr; сгруппировал по людям &rarr; участники находят себя по селфи за секунды</p>
+      </div>
+      <div class="card card--green">
+        <h3>Ключевые фичи</h3>
+        <ul>
+          <li><strong>Real-time pipeline</strong> с WebSocket-прогрессом</li>
+          <li><strong>Selfie search</strong> — найди себя по фото</li>
+          <li><strong>ZIP export</strong> — скачай все свои фото</li>
+          <li><strong>Privacy-first</strong> — consent + удаление данных</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 3: Section - Process -->
+<div class="slide slide--section">
+  <div class="num">01</div>
+  <h2>AI-разработка</h2>
+  <p>BMAD-METHOD &middot; GitHub Issues &middot; MCP Playwright</p>
+</div>
+
+<!-- SLIDE 4: BMAD Process -->
+<div class="slide" style="padding: 40px 60px;">
+  <h2 style="margin-bottom: 16px;">BMAD-METHOD: AI-driven Agile</h2>
+  <p class="subtitle" style="margin-bottom: 16px; margin-top: -12px; font-size: 14px;">Полный цикл от PRD до деплоя за 1 день. Claude Code выступает в роли целой команды разработки.</p>
+  <div class="process-flow" style="margin-bottom: 16px; gap: 8px;">
+    <div class="process-step" style="padding: 8px 10px;">
+      <div class="step-num" style="font-size: 10px;">01</div>
+      <div class="step-name" style="font-size: 11px;">PRD</div>
+    </div>
+    <div class="process-step" style="padding: 8px 10px;">
+      <div class="step-num" style="font-size: 10px;">02</div>
+      <div class="step-name" style="font-size: 11px;">ADR (x7)</div>
+    </div>
+    <div class="process-step" style="padding: 8px 10px;">
+      <div class="step-num" style="font-size: 10px;">03</div>
+      <div class="step-name" style="font-size: 11px;">OpenAPI</div>
+    </div>
+    <div class="process-step" style="padding: 8px 10px;">
+      <div class="step-num" style="font-size: 10px;">04</div>
+      <div class="step-name" style="font-size: 11px;">DB Schema</div>
+    </div>
+    <div class="process-step" style="padding: 8px 10px;">
+      <div class="step-num" style="font-size: 10px;">05</div>
+      <div class="step-name" style="font-size: 11px;">UI/UX</div>
+    </div>
+    <div class="process-step" style="padding: 8px 10px;">
+      <div class="step-num" style="font-size: 10px;">06</div>
+      <div class="step-name" style="font-size: 11px;">Backend</div>
+    </div>
+    <div class="process-step" style="padding: 8px 10px;">
+      <div class="step-num" style="font-size: 10px;">07</div>
+      <div class="step-name" style="font-size: 11px;">Frontend</div>
+    </div>
+    <div class="process-step" style="padding: 8px 10px;">
+      <div class="step-num" style="font-size: 10px;">08</div>
+      <div class="step-name" style="font-size: 11px;">Deploy</div>
+    </div>
+  </div>
+  <div class="cols" style="gap: 24px;">
+    <div class="col">
+      <div class="card card--accent" style="padding: 16px; margin-bottom: 12px;">
+        <h3 style="font-size: 18px; margin-bottom: 8px;">Что такое BMAD-METHOD?</h3>
+        <p style="font-size: 13px; line-height: 1.5;">BMAD (BMad Agentic Development) — это AI-driven agile методология, где <strong>Claude Code выступает в роли целой команды</strong>.
+          Вместо найма специалистов, один AI-агент переключается между ролями: PM пишет PRD, Architect принимает архитектурные решения (ADR),
+          UX Designer создаёт дизайн-систему, Developer пишет код, QA тестирует. Всё построено на <strong>spec-driven подходе</strong>:
+          сначала спецификация, потом реализация. 43 специализированных скилла с чек-листами обеспечивают качество на каждом этапе.</p>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <h3 style="font-size: 16px; margin-bottom: 6px;">Spec-driven подход</h3>
+        <ul style="font-size: 13px; padding-left: 18px;">
+          <li style="margin-bottom: 4px;"><strong>OpenAPI spec</strong> — source of truth для API (сначала контракт, потом код)</li>
+          <li style="margin-bottom: 4px;"><strong>orval</strong> — автогенерация TypeScript клиента из OpenAPI</li>
+          <li style="margin-bottom: 4px;"><strong>Pydantic</strong> — валидация на бэкенде по схеме</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <h3 style="font-size: 16px; margin-bottom: 6px;">Роли AI-агента (Claude Code)</h3>
+        <ul style="font-size: 13px; padding-left: 18px;">
+          <li style="margin-bottom: 4px;"><strong>PM (John)</strong> — написал PRD с требованиями и user stories</li>
+          <li style="margin-bottom: 4px;"><strong>Architect (Winston)</strong> — принял 7 ADR с обоснованием выбора</li>
+          <li style="margin-bottom: 4px;"><strong>UX Designer (Sally)</strong> — создал дизайн-систему и компоненты</li>
+          <li style="margin-bottom: 4px;"><strong>Developer (Amelia)</strong> — реализовал backend + frontend</li>
+          <li style="margin-bottom: 4px;"><strong>QA (Quinn)</strong> — протестировал через MCP Playwright</li>
+        </ul>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <h3 style="font-size: 16px; margin-bottom: 6px;">7 Architecture Decision Records</h3>
+        <table style="font-size: 12px;">
+          <tr><td style="padding: 3px 8px;">ADR-001</td><td style="padding: 3px 8px;">ML Model &rarr; InsightFace</td></tr>
+          <tr><td style="padding: 3px 8px;">ADR-002</td><td style="padding: 3px 8px;">Clustering &rarr; HDBSCAN</td></tr>
+          <tr><td style="padding: 3px 8px;">ADR-003</td><td style="padding: 3px 8px;">Database &rarr; PostgreSQL + pgvector</td></tr>
+          <tr><td style="padding: 3px 8px;">ADR-004</td><td style="padding: 3px 8px;">Frontend &rarr; React + shadcn/ui</td></tr>
+          <tr><td style="padding: 3px 8px;">ADR-005</td><td style="padding: 3px 8px;">Pipeline &rarr; FastAPI WebSocket</td></tr>
+          <tr><td style="padding: 3px 8px;">ADR-006</td><td style="padding: 3px 8px;">Descriptions &rarr; OpenRouter Gemini</td></tr>
+          <tr><td style="padding: 3px 8px;">ADR-007</td><td style="padding: 3px 8px;">Deploy &rarr; Docker + VPS</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 5: GitHub Issues -->
+<div class="slide">
+  <h2>GitHub Issues: трекинг задач</h2>
+  <p class="subtitle">16 issues, 7 milestones, 6 кастомных labels — всё закрыто</p>
+  <div class="cols">
+    <div class="col">
+      <div class="screenshot-frame" style="margin-bottom: 12px;">
+        <img src="img/github-issues.png" class="screenshot" style="max-height: 240px;">
+      </div>
+      <div class="card card--green" style="padding: 16px;">
+        <h3 style="margin-bottom: 6px;">16/16 issues closed</h3>
+        <p style="font-size: 14px;">Полное покрытие: от настройки окружения до деплоя на VPS</p>
+      </div>
+    </div>
+    <div class="col">
+      <div class="screenshot-frame" style="margin-bottom: 12px;">
+        <img src="img/github-milestones.png" class="screenshot" style="max-height: 240px;">
+      </div>
+      <div class="card" style="padding: 16px;">
+        <h3 style="margin-bottom: 8px;">Labels</h3>
+        <div>
+          <span class="tag" style="background: #0075ca;">spec (5)</span>
+          <span class="tag" style="background: #e4e669; color: #333;">backend (5)</span>
+          <span class="tag" style="background: #d93f0b;">frontend (3)</span>
+          <span class="tag" style="background: #0e8a16;">ml (2)</span>
+          <span class="tag" style="background: #5319e7;">deploy (1)</span>
+          <span class="tag" style="background: #f9d0c4; color: #333;">dx (3)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: Design System -->
+<div class="slide">
+  <h2>Дизайн-система: UI/UX Pro Max</h2>
+  <p class="subtitle">Кастомный Claude Code скилл для генерации design tokens</p>
+  <div class="cols">
+    <div class="col">
+      <div class="card">
+        <h3>Стиль: Swiss Minimalism</h3>
+        <p>Чистые линии, много пространства, фокус на контенте. Выбран из 5 стилей через скилл UI/UX Pro Max.</p>
+      </div>
+      <div class="card" style="padding: 20px;">
+        <h3>Палитра</h3>
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+          <div style="width: 60px; height: 60px; background: #6366F1; border-radius: 10px;"></div>
+          <div style="width: 60px; height: 60px; background: #818CF8; border-radius: 10px;"></div>
+          <div style="width: 60px; height: 60px; background: #10B981; border-radius: 10px;"></div>
+          <div style="width: 60px; height: 60px; background: #F59E0B; border-radius: 10px;"></div>
+          <div style="width: 60px; height: 60px; background: #1E293B; border-radius: 10px;"></div>
+        </div>
+        <p style="margin-top: 8px; font-size: 14px;">Indigo (primary) &middot; Emerald (CTA) &middot; Amber (warning) &middot; Slate (text)</p>
+      </div>
+      <div class="card">
+        <h3>Типографика</h3>
+        <p style="font-family: 'Space Grotesk'; font-size: 20px; font-weight: 600;">Space Grotesk — заголовки</p>
+        <p style="font-family: 'DM Sans'; font-size: 18px;">DM Sans — основной текст</p>
+        <p style="font-family: 'JetBrains Mono'; font-size: 16px;">JetBrains Mono — метрики</p>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <h3>Компоненты (7)</h3>
+        <ul>
+          <li><strong>UploadZone</strong> — drag & drop загрузка</li>
+          <li><strong>PipelineProgress</strong> — 5-шаговый прогресс</li>
+          <li><strong>PersonCard</strong> — аватар + статистика</li>
+          <li><strong>PhotoGrid</strong> — адаптивная сетка</li>
+          <li><strong>PhotoLightbox</strong> — полноэкранный просмотр</li>
+          <li><strong>SelfieSearch</strong> — поиск по лицу</li>
+          <li><strong>ConsentBanner</strong> — согласие GDPR</li>
+        </ul>
+      </div>
+      <div class="screenshot-frame">
+        <img src="img/events-page.png" class="screenshot" style="max-height: 180px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 7: Testing MCP -->
+<div class="slide" style="padding: 36px 60px;">
+  <h2 style="margin-bottom: 8px; font-size: 28px;">Тестирование: MCP Playwright</h2>
+  <p class="subtitle" style="margin-bottom: 12px; margin-top: 0; font-size: 13px;">AI-агент сам тестирует приложение в реальном браузере — без тестовых скриптов</p>
+  <div class="cols" style="gap: 20px;">
+    <div class="col">
+      <div class="card" style="padding: 12px; margin-bottom: 8px;">
+        <h3 style="font-size: 15px; margin-bottom: 4px;">Что такое MCP?</h3>
+        <p style="font-size: 12px; line-height: 1.45;">Model Context Protocol — стандарт от Anthropic, дающий LLM доступ к внешним инструментам.
+          Claude Code через MCP управляет <strong>реальным браузером</strong>: открывает страницы, кликает, заполняет формы, делает скриншоты.</p>
+      </div>
+      <div class="card card--green" style="padding: 12px; margin-bottom: 8px;">
+        <h3 style="font-size: 15px; margin-bottom: 4px;">Как это работает</h3>
+        <ul style="font-size: 12px; padding-left: 16px; line-height: 1.45;">
+          <li style="margin-bottom: 2px;">Подключение к браузеру через MCP Playwright</li>
+          <li style="margin-bottom: 2px;">Выполнение сценариев: навигация, клики, ввод</li>
+          <li style="margin-bottom: 2px;">Скриншоты + анализ DOM на каждом шаге</li>
+          <li style="margin-bottom: 2px;">AI сам решает, прошёл ли тест</li>
+        </ul>
+      </div>
+      <div class="card" style="padding: 10px;">
+        <h3 style="font-size: 14px; margin-bottom: 4px;">Покрытие</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+          <span class="tag--green tag" style="font-size: 10px; padding: 2px 7px;">Создание ивента</span>
+          <span class="tag--green tag" style="font-size: 10px; padding: 2px 7px;">Загрузка фото</span>
+          <span class="tag--green tag" style="font-size: 10px; padding: 2px 7px;">Pipeline</span>
+          <span class="tag--green tag" style="font-size: 10px; padding: 2px 7px;">Галерея</span>
+          <span class="tag--green tag" style="font-size: 10px; padding: 2px 7px;">VPS деплой</span>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" style="background: var(--slate-900); color: white; font-family: 'JetBrains Mono'; font-size: 11px; line-height: 1.6; padding: 12px; margin-bottom: 8px;">
+        <p style="color: var(--emerald);">// Claude Code + MCP Playwright</p>
+        <p style="color: white;">> browser_navigate("localhost:5173")</p>
+        <p style="color: var(--slate-200);">  Page loaded: WhoIsIn</p>
+        <p style="color: white;">> browser_click(ref="create-event")</p>
+        <p style="color: var(--slate-200);">  Modal opened</p>
+        <p style="color: white;">> browser_type(ref="name", "TCF")</p>
+        <p style="color: white;">> browser_click(ref="submit")</p>
+        <p style="color: var(--slate-200);">  Event created: id=1</p>
+        <p style="color: white;">> browser_take_screenshot()</p>
+        <p style="color: var(--emerald);">  &#10004; Saved: event-created.png</p>
+      </div>
+      <div class="card" style="padding: 10px; margin-bottom: 8px;">
+        <h3 style="font-size: 14px; margin-bottom: 4px;">Преимущества</h3>
+        <p style="font-size: 12px; line-height: 1.45;">Не нужно писать тесты — AI сам понимает что проверять. Тестировали и на localhost, и на VPS. 13 скриншотов проанализированы AI.</p>
+      </div>
+      <div class="screenshot-frame">
+        <img src="img/selfie-search.png" class="screenshot" style="max-height: 120px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 8: Section - Stack -->
+<div class="slide slide--section">
+  <div class="num">02</div>
+  <h2>Выбор стека</h2>
+  <p>Сравнение альтернатив и обоснование решений</p>
+</div>
+
+<!-- SLIDE 9: ML Stack comparison -->
+<div class="slide">
+  <h2>ML: Выбор модели детекции лиц</h2>
+  <p class="subtitle">Бенчмарк 3 моделей на реальных данных</p>
+  <table>
+    <tr>
+      <th>Модель</th>
+      <th>Скорость (CPU)</th>
+      <th>Размер</th>
+      <th>Качество</th>
+      <th>Embeddings</th>
+      <th>Вердикт</th>
+    </tr>
+    <tr class="selected">
+      <td><strong>InsightFace buffalo_sc</strong></td>
+      <td>~150ms/фото</td>
+      <td>16 MB</td>
+      <td>Высокое</td>
+      <td>ArcFace 512-dim</td>
+      <td><span class="check">&#10004; Выбрано</span></td>
+    </tr>
+    <tr>
+      <td>InsightFace buffalo_l</td>
+      <td>~450ms/фото</td>
+      <td>127 MB</td>
+      <td>Очень высокое</td>
+      <td>ArcFace 512-dim</td>
+      <td>Слишком медленно для CPU</td>
+    </tr>
+    <tr>
+      <td>dlib HOG + face_recognition</td>
+      <td>~200ms/фото</td>
+      <td>~100 MB</td>
+      <td>Среднее</td>
+      <td>128-dim</td>
+      <td>Устаревшие embeddings</td>
+    </tr>
+    <tr>
+      <td>MTCNN + FaceNet</td>
+      <td>~300ms/фото</td>
+      <td>~90 MB</td>
+      <td>Хорошее</td>
+      <td>128-dim</td>
+      <td>Сложная интеграция</td>
+    </tr>
+  </table>
+  <div class="highlight" style="margin-top: 20px;">
+    <strong>Почему buffalo_sc:</strong> 3x быстрее buffalo_l при сравнимом качестве на CPU-сервере. ArcFace 512-dim embeddings дают лучшую кластеризацию, чем 128-dim альтернативы.
+  </div>
+</div>
+
+<!-- SLIDE 10: Clustering -->
+<div class="slide">
+  <h2>Кластеризация: HDBSCAN vs альтернативы</h2>
+  <p class="subtitle">Группировка лиц без заранее известного числа людей</p>
+  <table>
+    <tr>
+      <th>Алгоритм</th>
+      <th>Нужен K?</th>
+      <th>Шум</th>
+      <th>Кластеры разного размера</th>
+      <th>Сложность</th>
+    </tr>
+    <tr class="selected">
+      <td><strong>HDBSCAN</strong></td>
+      <td><span class="check">Нет</span></td>
+      <td><span class="check">Да</span></td>
+      <td><span class="check">Да</span></td>
+      <td>O(n log n)</td>
+    </tr>
+    <tr>
+      <td>K-Means</td>
+      <td><span class="cross">Да (K)</span></td>
+      <td><span class="cross">Нет</span></td>
+      <td><span class="cross">Нет</span></td>
+      <td>O(nKi)</td>
+    </tr>
+    <tr>
+      <td>DBSCAN</td>
+      <td>Нет, но нужен eps</td>
+      <td><span class="check">Да</span></td>
+      <td><span class="cross">Нет</span></td>
+      <td>O(n log n)</td>
+    </tr>
+    <tr>
+      <td>Agglomerative</td>
+      <td><span class="cross">Да (threshold)</span></td>
+      <td><span class="cross">Нет</span></td>
+      <td><span class="check">Да</span></td>
+      <td>O(n&sup3;)</td>
+    </tr>
+  </table>
+  <div class="highlight" style="margin-top: 20px;">
+    <strong>Почему HDBSCAN:</strong> Не требует заранее знать количество людей. Автоматически выделяет выбросы (нечёткие лица). min_cluster_size=2 позволяет группировать даже людей с 2 фото.
+  </div>
+</div>
+
+<!-- SLIDE 11: Full stack -->
+<div class="slide">
+  <h2>Полный стек технологий</h2>
+  <div class="cols">
+    <div class="col">
+      <div class="card">
+        <h3>Backend</h3>
+        <div>
+          <span class="tag">Python 3.12</span>
+          <span class="tag">FastAPI</span>
+          <span class="tag">SQLAlchemy async</span>
+          <span class="tag">Pydantic v2</span>
+        </div>
+        <p style="margin-top: 12px; font-size: 15px;">15 REST endpoints + WebSocket для real-time прогресса pipeline</p>
+      </div>
+      <div class="card">
+        <h3>Database</h3>
+        <div>
+          <span class="tag--dark tag">PostgreSQL 16</span>
+          <span class="tag--green tag">pgvector</span>
+        </div>
+        <p style="margin-top: 12px; font-size: 15px;">Единая БД: реляционные данные + векторный поиск по embeddings (cosine similarity)</p>
+      </div>
+      <div class="card">
+        <h3>ML Pipeline</h3>
+        <div>
+          <span class="tag">InsightFace</span>
+          <span class="tag">HDBSCAN</span>
+          <span class="tag--amber tag">OpenRouter</span>
+        </div>
+        <p style="margin-top: 12px; font-size: 15px;">Детекция &rarr; Vectorize &rarr; Кластеризация &rarr; Описания (Gemini Flash)</p>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <h3>Frontend</h3>
+        <div>
+          <span class="tag">React 19</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag">Vite</span>
+          <span class="tag">Tailwind v4</span>
+          <span class="tag--green tag">shadcn/ui</span>
+        </div>
+        <p style="margin-top: 12px; font-size: 15px;">Typed API client (orval) + React Query + WebSocket hooks</p>
+      </div>
+      <div class="card">
+        <h3>Deploy</h3>
+        <div>
+          <span class="tag--dark tag">Docker Compose</span>
+          <span class="tag--dark tag">Nginx</span>
+          <span class="tag--dark tag">VPS Ubuntu</span>
+        </div>
+        <p style="margin-top: 12px; font-size: 15px;">3 контейнера: db, backend, frontend. Reverse proxy + WebSocket + static caching</p>
+      </div>
+      <div class="card">
+        <h3>Почему не...</h3>
+        <p style="font-size: 14px; margin-top: 8px;">
+          <strong>Django</strong> &rarr; FastAPI быстрее для async ML pipeline<br>
+          <strong>MongoDB</strong> &rarr; pgvector = vector + relational в одной БД<br>
+          <strong>Next.js</strong> &rarr; SPA + orval codegen проще для API-first<br>
+          <strong>Kubernetes</strong> &rarr; overkill для одного VPS
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 12: Section - Product -->
+<div class="slide slide--section">
+  <div class="num">03</div>
+  <h2>Продукт</h2>
+  <p>Архитектура, pipeline, результаты</p>
+</div>
+
+<!-- SLIDE 13: Architecture -->
+<div class="slide">
+  <h2>Архитектура системы</h2>
+  <div class="arch-diagram">
+  <span class="hl">Frontend (React 19)</span>              <span class="hl">Backend (FastAPI)</span>               <span class="hl">Database</span>
+  ┌─────────────────────┐        ┌──────────────────────┐        ┌──────────────────┐
+  │  React + Vite       │  REST  │  15 API endpoints    │  SQL   │  PostgreSQL 16   │
+  │  Tailwind + shadcn  │───────▶│  WebSocket manager   │───────▶│  + pgvector      │
+  │  React Query        │◀───────│  Pipeline orchestrator│◀───────│  7 tables        │
+  │  WebSocket hook     │   WS   │  Face detector       │        │  512-dim vectors  │
+  └─────────────────────┘        │  Face clusterer      │        └──────────────────┘
+                                 └──────────────────────┘
+                                          │
+                                 ┌────────▼─────────┐
+                                 │  <span class="gr">ML Pipeline</span>       │
+                                 │  <span class="am">InsightFace</span>       │
+                                 │  <span class="am">HDBSCAN</span>           │
+                                 │  <span class="am">OpenRouter API</span>    │
+                                 └──────────────────┘
+  </div>
+  <div style="margin-top: 20px;">
+    <h3>ML Pipeline (5 фаз)</h3>
+    <div class="pipeline-flow">
+      <div class="pipeline-step">
+        <div class="icon">🔍</div>
+        <div class="name">Детекция лиц</div>
+      </div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step">
+        <div class="icon">🧬</div>
+        <div class="name">Vectorize<br><small>ArcFace 512-dim</small></div>
+      </div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step">
+        <div class="icon">👥</div>
+        <div class="name">Кластеризация<br><small>HDBSCAN</small></div>
+      </div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step">
+        <div class="icon">📝</div>
+        <div class="name">Описания<br><small>Gemini Flash</small></div>
+      </div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step" style="border: 2px solid var(--emerald);">
+        <div class="icon">&#10004;</div>
+        <div class="name">Готово</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 14: Real results -->
+<div class="slide">
+  <h2>Результаты на реальных данных</h2>
+  <p class="subtitle">TCF Moscow 2024 — 682 фотографии с мероприятия</p>
+  <div class="stat-grid" style="margin-bottom: 16px;">
+    <div class="stat-box">
+      <div class="num">683</div>
+      <div class="label">Фото загружено</div>
+    </div>
+    <div class="stat-box">
+      <div class="num">1353</div>
+      <div class="label">Лиц найдено</div>
+    </div>
+    <div class="stat-box">
+      <div class="num" style="color: var(--emerald);">144</div>
+      <div class="label">Персон определено</div>
+    </div>
+    <div class="stat-box">
+      <div class="num">63</div>
+      <div class="label">Фото без лиц</div>
+    </div>
+  </div>
+  <div class="cols">
+    <div class="col">
+      <div class="screenshot-frame">
+        <img src="img/tcf-event.png" class="screenshot" style="max-height: 300px;">
+      </div>
+    </div>
+    <div class="col">
+      <div class="screenshot-frame">
+        <img src="img/persons-grid.png" class="screenshot" style="max-height: 300px;">
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <span>WhoIsIn</span>
+    <span>Demo: http://185.46.11.151/events/2</span>
+  </div>
+</div>
+
+<!-- SLIDE 15: Stats -->
+<div class="slide">
+  <h2>Статистика проекта</h2>
+  <div class="stat-grid" style="margin-bottom: 24px;">
+    <div class="stat-box">
+      <div class="num">4228</div>
+      <div class="label">Строк кода</div>
+    </div>
+    <div class="stat-box">
+      <div class="num">19</div>
+      <div class="label">Коммитов</div>
+    </div>
+    <div class="stat-box">
+      <div class="num">7</div>
+      <div class="label">ADR</div>
+    </div>
+    <div class="stat-box">
+      <div class="num">13</div>
+      <div class="label">Скриншотов</div>
+    </div>
+  </div>
+  <div class="cols">
+    <div class="col">
+      <div class="card">
+        <h3>Backend (Python)</h3>
+        <ul>
+          <li>2160 строк, 20 файлов</li>
+          <li>15 REST endpoints</li>
+          <li>WebSocket для real-time</li>
+          <li>Async SQLAlchemy + pgvector</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <h3>Frontend (TypeScript)</h3>
+        <ul>
+          <li>2068 строк, 18 файлов</li>
+          <li>7 UI-компонентов</li>
+          <li>3 страницы (SPA)</li>
+          <li>Typed API + React Query</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <h3>Инфра</h3>
+        <ul>
+          <li>3 Docker-сервиса</li>
+          <li>Nginx reverse proxy</li>
+          <li>VPS Ubuntu 22.04</li>
+          <li>GitHub CI-ready</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="highlight">
+    <strong>AI-accelerated:</strong> Полный цикл разработки (PRD &rarr; ADR &rarr; Schema &rarr; Code &rarr; Deploy) выполнен за ~1 день с помощью Claude Code + BMAD-METHOD + MCP.
+  </div>
+</div>
+
+<!-- SLIDE 16: Final -->
+<div class="slide slide--title" style="background: linear-gradient(135deg, var(--slate-900) 0%, #334155 100%);">
+  <h1 style="font-size: 48px;">WhoIsIn</h1>
+  <p style="font-size: 22px;">Загрузил фото &rarr; AI нашёл лица &rarr; Каждый нашёл себя</p>
+  <div style="margin-top: 40px; display: flex; gap: 24px; justify-content: center;">
+    <div class="badge" style="background: var(--indigo);">Demo: 185.46.11.151</div>
+    <div class="badge" style="background: rgba(255,255,255,0.15);">GitHub: ivanlardis/WhoIsIn</div>
+  </div>
+  <div style="margin-top: 40px; display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
+    <span class="tag">InsightFace</span>
+    <span class="tag">HDBSCAN</span>
+    <span class="tag">pgvector</span>
+    <span class="tag">FastAPI</span>
+    <span class="tag">React 19</span>
+    <span class="tag">WebSocket</span>
+    <span class="tag">Docker</span>
+    <span class="tag--green tag">MCP Playwright</span>
+    <span class="tag--amber tag">BMAD-METHOD</span>
+  </div>
+</div>
+
+</body>
+</html>

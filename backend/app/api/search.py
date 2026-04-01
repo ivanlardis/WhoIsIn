@@ -1,5 +1,6 @@
 """Search API router — selfie search and semantic search stub."""
 
+import json
 import tempfile
 from pathlib import Path
 
@@ -74,8 +75,9 @@ async def search_by_selfie(
         LIMIT 3
     """)
 
+    emb_str = "[" + ",".join(str(x) for x in embedding) + "]"
     result = await db.execute(
-        query, {"emb": str(embedding), "event_id": event_id}
+        query, {"emb": emb_str, "event_id": event_id}
     )
     rows = result.fetchall()
 

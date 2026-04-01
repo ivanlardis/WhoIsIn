@@ -21,3 +21,13 @@ export function formatEta(seconds: number | null | undefined): string {
   if (m > 0) return `~${m} мин ${s} сек`;
   return `~${s} сек`;
 }
+
+declare global {
+  interface Window {
+    umami?: { track: (event: string, data?: Record<string, unknown>) => void };
+  }
+}
+
+export function trackEvent(event: string, data?: Record<string, unknown>) {
+  window.umami?.track(event, data);
+}

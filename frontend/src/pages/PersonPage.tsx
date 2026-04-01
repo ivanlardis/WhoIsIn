@@ -9,7 +9,7 @@ import {
   X,
   Loader2,
 } from "lucide-react";
-import { cn } from "../lib/utils";
+import { cn, trackEvent } from "../lib/utils";
 import { usePersonPhotos, useUpdatePerson } from "../api/hooks";
 import { downloadPersonPhotos } from "../api/client";
 import PhotoGrid from "../components/PhotoGrid";
@@ -167,7 +167,7 @@ export default function PersonPage() {
         {/* Download */}
         <button
           type="button"
-          onClick={() => downloadPersonPhotos(personId)}
+          onClick={() => { trackEvent("zip-downloaded", { personId }); downloadPersonPhotos(personId); }}
           className={cn(
             "flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5",
             "text-sm font-medium text-white shadow-sm",
