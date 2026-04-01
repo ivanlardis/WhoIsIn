@@ -1,0 +1,574 @@
+openapi: 3.1.0
+info:
+  title: WhoIsIn API
+  description: Intelligent face-sorting photo organizer for events
+  version: 1.0.0
+
+servers:
+  - url: /api/v1
+
+paths:
+  /events:
+    post:
+      operationId: createEvent
+      summary: Создать мероприятие
+      tags: [Events]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEventRequest'
+      responses:
+        '201':
+          description: Мероприятие создано
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+    get:
+      operationId: listEvents
+      summary: Список мероприятий
+      tags: [Events]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+
+  /events/{eventId}:
+    get:
+      operationId: getEvent
+      summary: Получить мероприятие
+      tags: [Events]
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventDetail'
+    delete:
+      operationId: deleteEvent
+      summary: Удалить мероприятие и все данные
+      tags: [Events, Privacy]
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+      responses:
+        '204':
+          description: Мероприятие и все данные удалены
+
+  /events/{eventId}/photos:
+    post:
+      operationId: uploadPhotos
+      summary: Загрузить фотографии
+      tags: [Photos]
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadResult'
+    get:
+      operationId: listPhotos
+      summary: Список фото мероприятия
+      tags: [Photos]
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhotoList'
+
+  /events/{eventId}/photos/{photoId}:
+    get:
+      operationId: getPhoto
+      summary: Получить фото с метаданными
+      tags: [Photos]
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+        - $ref: '#/components/parameters/PhotoId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhotoDetail'
+
+  /events/{eventId}/pipeline/start:
+    post:
+      operationId: startPipeline
+      summary: Запустить ML-обработку
+      tags: [Pipeline]
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+      responses:
+        '202':
+          description: Pipeline запущен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineStatus'
+
+  /events/{eventId}/pipeline/status:
+    get:
+      operationId: getPipelineStatus
+      summary: Статус обработки
+      tags: [Pipeline]
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineStatus'
+
+  /events/{eventId}/persons:
+    get:
+      operationId: listPersons
+      summary: Список персон мероприятия
+      tags: [Persons]
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Person'
+
+  /persons/{personId}:
+    put:
+      operationId: updatePerson
+      summary: Переименовать персону
+      tags: [Persons]
+      parameters:
+        - $ref: '#/components/parameters/PersonId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePersonRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+
+  /persons/{personId}/photos:
+    get:
+      operationId: getPersonPhotos
+      summary: Все фото персоны
+      tags: [Persons]
+      parameters:
+        - $ref: '#/components/parameters/PersonId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Photo'
+
+  /persons/{personId}/download:
+    get:
+      operationId: downloadPersonPhotos
+      summary: Скачать ZIP фото персоны
+      tags: [Persons]
+      parameters:
+        - $ref: '#/components/parameters/PersonId'
+      responses:
+        '200':
+          description: ZIP-архив
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+
+  /events/{eventId}/search/selfie:
+    post:
+      operationId: searchBySelfie
+      summary: Поиск по селфи
+      tags: [Search]
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SelfieSearchResult'
+
+  /events/{eventId}/search/semantic:
+    post:
+      operationId: searchSemantic
+      summary: Семантический поиск по тексту
+      tags: [Search]
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  example: "девушка в красном платье"
+              required: [query]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SemanticSearchResult'
+
+  /consent:
+    post:
+      operationId: recordConsent
+      summary: Зафиксировать согласие на обработку биометрии
+      tags: [Privacy]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsentRequest'
+      responses:
+        '201':
+          description: Согласие зафиксировано
+
+  /benchmark/run:
+    post:
+      operationId: runBenchmark
+      summary: Запустить сравнение ML-моделей
+      tags: [Benchmark]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventId:
+                  type: integer
+                sampleSize:
+                  type: integer
+                  default: 50
+      responses:
+        '202':
+          description: Benchmark запущен
+
+  /benchmark/results:
+    get:
+      operationId: getBenchmarkResults
+      summary: Результаты сравнения моделей
+      tags: [Benchmark]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BenchmarkReport'
+
+components:
+  parameters:
+    EventId:
+      name: eventId
+      in: path
+      required: true
+      schema:
+        type: integer
+    PhotoId:
+      name: photoId
+      in: path
+      required: true
+      schema:
+        type: integer
+    PersonId:
+      name: personId
+      in: path
+      required: true
+      schema:
+        type: integer
+
+  schemas:
+    CreateEventRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "TechCommunity Fest 2026"
+        date:
+          type: string
+          format: date
+        description:
+          type: string
+      required: [name]
+
+    Event:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        date:
+          type: string
+          format: date
+        description:
+          type: string
+        photoCount:
+          type: integer
+        personCount:
+          type: integer
+        status:
+          type: string
+          enum: [created, processing, completed]
+        createdAt:
+          type: string
+          format: date-time
+
+    EventDetail:
+      allOf:
+        - $ref: '#/components/schemas/Event'
+        - type: object
+          properties:
+            stats:
+              type: object
+              properties:
+                totalPhotos:
+                  type: integer
+                totalFaces:
+                  type: integer
+                totalPersons:
+                  type: integer
+                photosWithoutFaces:
+                  type: integer
+
+    UploadResult:
+      type: object
+      properties:
+        uploaded:
+          type: integer
+        failed:
+          type: integer
+        photoIds:
+          type: array
+          items:
+            type: integer
+
+    Photo:
+      type: object
+      properties:
+        id:
+          type: integer
+        filename:
+          type: string
+        url:
+          type: string
+        thumbnailUrl:
+          type: string
+        width:
+          type: integer
+        height:
+          type: integer
+        faceCount:
+          type: integer
+
+    PhotoDetail:
+      allOf:
+        - $ref: '#/components/schemas/Photo'
+        - type: object
+          properties:
+            faces:
+              type: array
+              items:
+                $ref: '#/components/schemas/Face'
+            description:
+              type: string
+
+    PhotoList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Photo'
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+
+    Face:
+      type: object
+      properties:
+        id:
+          type: integer
+        bbox:
+          type: object
+          properties:
+            x: { type: number }
+            y: { type: number }
+            width: { type: number }
+            height: { type: number }
+        confidence:
+          type: number
+        thumbnailUrl:
+          type: string
+        personId:
+          type: integer
+          nullable: true
+
+    Person:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: "Person_1"
+        thumbnailUrl:
+          type: string
+        photoCount:
+          type: integer
+        faceCount:
+          type: integer
+
+    UpdatePersonRequest:
+      type: object
+      properties:
+        name:
+          type: string
+      required: [name]
+
+    PipelineStatus:
+      type: object
+      properties:
+        eventId:
+          type: integer
+        status:
+          type: string
+          enum: [idle, detecting, embedding, clustering, describing, complete, failed]
+        progress:
+          type: number
+          minimum: 0
+          maximum: 100
+        etaSeconds:
+          type: integer
+        currentPhotoIndex:
+          type: integer
+        totalPhotos:
+          type: integer
+        error:
+          type: string
+          nullable: true
+
+    SelfieSearchResult:
+      type: object
+      properties:
+        matches:
+          type: array
+          items:
+            type: object
+            properties:
+              person:
+                $ref: '#/components/schemas/Person'
+              confidence:
+                type: number
+          maxItems: 3
+
+    SemanticSearchResult:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              photo:
+                $ref: '#/components/schemas/Photo'
+              relevance:
+                type: number
+
+    ConsentRequest:
+      type: object
+      properties:
+        eventId:
+          type: integer
+        accepted:
+          type: boolean
+      required: [eventId, accepted]
+
+    BenchmarkReport:
+      type: object
+      properties:
+        models:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              precision:
+                type: number
+              recall:
+                type: number
+              f1:
+                type: number
+              avgTimePerPhoto:
+                type: number
+              totalPhotos:
+                type: integer
+        runDate:
+          type: string
+          format: date-time
