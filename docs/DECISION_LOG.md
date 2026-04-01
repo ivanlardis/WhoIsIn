@@ -64,3 +64,19 @@
 - Только GitHub Projects — избыточно для текущего масштаба
 
 **Итог:** Тройной трекинг обеспечивает прозрачность на всех уровнях.
+
+---
+
+## 2026-04-01 — 7 архитектурных решений (ADR-001..007)
+
+Все решения задокументированы в `docs/ADR/`:
+
+| ADR | Решение | Ключевое обоснование |
+|---|---|---|
+| 001 ML Model | InsightFace buffalo_sc | 3x быстрее на CPU, ArcFace 512-dim embeddings |
+| 002 Clustering | HDBSCAN | Не нужен ручной подбор eps |
+| 003 Database | PostgreSQL + pgvector | Единая БД для реляционных данных и векторного поиска |
+| 004 Frontend | React + Tailwind + shadcn/ui | Production-quality UI, orval для codegen из OpenAPI |
+| 005 Pipeline | FastAPI WebSocket | Достаточно для single-server, нет лишних зависимостей |
+| 006 Search | OpenRouter gemini-flash | ~$0.005/фото, в бюджете $5 |
+| 007 Deploy | Docker Compose + Рег.ру VPS | Почасовая оплата, 4 vCPU / 8 GB RAM |

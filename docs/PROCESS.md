@@ -79,15 +79,26 @@
 ---
 
 ### Шаг 2: Архитектурные решения (ADR)
-**Статус:** ⏳ Ожидает
+**Статус:** ✅ Завершён
 **Агент:** BMAD Architect Agent
 
-**Что будем делать:**
-- 7 ADR: ML-модель, кластеризация, БД, фронтенд, пайплайн, семантический поиск, деплой
-- Каждое решение обсуждается, записывается в ADR и Decision Log
-- Диаграмма архитектуры через Excalidraw
+**Что сделали:**
+- 7 ADR записаны в docs/ADR/ (001-007)
+- Каждый ADR: контекст, решение, обоснование, альтернативы с причинами отклонения
+- Decision Log обновлён сводной таблицей всех решений
 
-**Решения:** (заполняется после выполнения)
+**Ключевые решения:**
+| ADR | Решение | Почему |
+|---|---|---|
+| ML Model | InsightFace buffalo_sc | 3x CPU speed |
+| Clustering | HDBSCAN | Без ручного eps |
+| Database | PostgreSQL + pgvector | Unified relational + vector |
+| Frontend | React + shadcn/ui | Production UI + orval codegen |
+| Pipeline | FastAPI WebSocket | Minimal deps |
+| Search | OpenRouter gemini-flash | $0.005/photo |
+| Deploy | Docker + Рег.ру | Почасовая оплата |
+
+**Артефакты:** docs/ADR/001-007.md, обновлён DECISION_LOG.md
 
 ---
 
