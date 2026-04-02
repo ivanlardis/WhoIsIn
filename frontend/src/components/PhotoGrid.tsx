@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Users } from "lucide-react";
-import { cn } from "../lib/utils";
+import { cn, trackEvent } from "../lib/utils";
 import type { Photo } from "../types";
 import PhotoLightbox from "./PhotoLightbox";
 
@@ -27,7 +27,7 @@ export default function PhotoGrid({ photos, eventId }: Props) {
           <button
             key={photo.id}
             type="button"
-            onClick={() => setSelectedIdx(idx)}
+            onClick={() => { trackEvent("photo-opened", { photoId: photo.id, eventId }); setSelectedIdx(idx); }}
             className={cn(
               "group relative aspect-square overflow-hidden rounded-lg bg-slate-100",
               "transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5",

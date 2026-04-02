@@ -69,7 +69,7 @@ export default function EventsPage() {
         </div>
         <button
           type="button"
-          onClick={() => setShowModal(true)}
+          onClick={() => { trackEvent("modal-open", { modal: "create-event" }); setShowModal(true); }}
           className={cn(
             "flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5",
             "text-sm font-medium text-white shadow-sm",
@@ -112,7 +112,7 @@ export default function EventsPage() {
               <button
                 key={event.id}
                 type="button"
-                onClick={() => navigate(`/events/${event.id}`)}
+                onClick={() => { trackEvent("event-opened", { eventId: event.id, eventName: event.name }); navigate(`/events/${event.id}`); }}
                 className={cn(
                   "group flex flex-col gap-4 rounded-xl bg-white p-5",
                   "shadow-sm text-left transition-all duration-200",

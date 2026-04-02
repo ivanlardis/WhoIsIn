@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ShieldAlert, Check } from "lucide-react";
+import { trackEvent } from "../lib/utils";
 import { useRecordConsent } from "../api/hooks";
 
 interface Props {
@@ -27,6 +28,7 @@ export default function ConsentBanner({ eventId }: Props) {
   }, [eventId]);
 
   const handleAccept = () => {
+    trackEvent("consent-accepted", { eventId });
     consent.mutate(
       { eventId, accepted: true },
       {

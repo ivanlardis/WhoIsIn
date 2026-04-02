@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Camera, Pencil } from "lucide-react";
-import { cn } from "../lib/utils";
+import { cn, trackEvent } from "../lib/utils";
 import type { Person } from "../types";
 
 interface Props {
@@ -19,6 +19,7 @@ export default function PersonCard({
   const navigate = useNavigate();
 
   const handleClick = () => {
+    trackEvent("person-viewed", { personId: person.id, personName: person.name, eventId });
     if (onClick) {
       onClick();
     } else {

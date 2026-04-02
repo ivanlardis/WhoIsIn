@@ -54,6 +54,7 @@ export default function EventPage() {
 
   const handleDelete = () => {
     if (!confirm("Удалить мероприятие и все данные?")) return;
+    trackEvent("event-deleted", { eventId });
     deleteEvent.mutate(eventId, {
       onSuccess: () => navigate("/"),
     });
@@ -103,7 +104,7 @@ export default function EventPage() {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => setShowSelfie(true)}
+            onClick={() => { trackEvent("modal-open", { modal: "selfie-search", eventId }); setShowSelfie(true); }}
             className="flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50"
           >
             <Search className="h-4 w-4" />
@@ -214,7 +215,7 @@ export default function EventPage() {
           <button
             key={t.key}
             type="button"
-            onClick={() => setTab(t.key)}
+            onClick={() => { trackEvent("tab-switched", { tab: t.key, eventId }); setTab(t.key); }}
             className={cn(
               "flex flex-1 items-center justify-center gap-2 rounded-md py-2 text-sm font-medium transition-all",
               tab === t.key

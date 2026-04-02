@@ -61,6 +61,7 @@ export default function PersonPage() {
   }, [editing]);
 
   const startEdit = () => {
+    trackEvent("person-rename-started", { personId });
     setEditValue(name);
     setEditing(true);
   };
@@ -75,6 +76,7 @@ export default function PersonPage() {
       { personId, data: { name: trimmed } },
       {
         onSuccess: (person) => {
+          trackEvent("person-renamed", { personId, newName: person.name });
           setName(person.name);
           setEditing(false);
         },
